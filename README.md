@@ -1,2 +1,4 @@
-ObfuscatorForC-
-===============
+Obfuscator
+==========
+
+Simple c# obfuscator

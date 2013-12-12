@@ -1,0 +1,43 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+
+namespace ConsoleApplication1
+{
+    class Program
+    {
+		static void A(int s, int e, string c) //static void A()
+        {	
+		
+			"wkrfh"; // (char)fr(23423)+(char)fr(23422343)+(char)fr(22343423)+(char)fr(23324423)+(char)fr(23234423);
+			int swef; // void
+			string da = c; // fw(3,c); // string da = fr(324); // fw(3,fr(324));
+			int df = s + e; // fw(234,s + e); // int df = fr(3242340) + fr(322344); //fw(234,fr(3242340) + fr(322344)); 
+			df = 234 + s; // df = (int)fr(234234) + s; // fw(5464674,(int)fr(234234) + s);
+        }
+
+        static void Main()
+		{
+			string w234efwefwe234; // void
+			A(3,5,323); // A(fr(234),fr(23),fr(23)); // fw(1324,fr(234)); fw(234,fr(23)); fw(2352, fr(23)); A();
+			
+			234; // fr(23);
+
+			int s = 123; // int s = fr(231324); // wr(234, fr(231324));
+			int d = 324 + 23423; // int d = fr(23124) + fr(23q21243); // fw(234235, fr(23124) + fr(23q21243));
+
+		}
+    }
+}
+
+
+// заменяем константы на вызовы fr
+// объявления параметров функций 
+// обявления переменных внутри функций type name; и type name = exp;
+// заменяем name = exp на wr(index, exp);
+// заменяем использование переменной на вызов функции fr
+// заменяем вызовы функций
+
+
+
