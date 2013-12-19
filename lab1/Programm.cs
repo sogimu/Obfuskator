@@ -10,12 +10,36 @@ namespace lab1
     {
         static public Func FindFunc(int index, string text)
         {
-            Regex regexToFindFunc = new Regex(@"static\s+void\s[a-z,A-Z]*\s?\(.*\)\s*\{[a-z,A-Z,\d,\s,"",'=',';','+','.','(',')',//]*}");
-            Match funcMatch = regexToFindFunc.Match(text, index);
-            if (funcMatch.Success)
+            Regex regexToFindFuncHead = new Regex(@"static\s+void\s[a-z,A-Z]*\s?\(.*\)");
+            Match funcMatchHead = regexToFindFuncHead.Match(text, index);
+            if (funcMatchHead.Success)
             {
-                string funcText = funcMatch.Value;
-                Func func = new Func( funcText, funcMatch.Index);
+                string funcHead = funcMatchHead.Value;
+
+                int numberOpenBracket = 0;
+                int numberCloseBracket = 0;
+
+                int lastBracketIndex = funcMatchHead.Index;// не наоборот??
+                int firsBracketIndex = text.IndexOf('{', lastBracketIndex);
+ 
+                while ((numberCloseBracket == 0 & numberOpenBracket == 0) || numberCloseBracket != numberOpenBracket)
+                {
+                    if (text.IndexOf('{', lastBracketIndex) > lastBracketIndex)
+                    {
+                        lastBracketIndex = text.IndexOf('{', lastBracketIndex);
+                        numberOpenBracket += 1;
+                    }
+
+                    if (text.IndexOf('}', lastBracketIndex) > lastBracketIndex)
+                    {
+                        lastBracketIndex = text.IndexOf('}', lastBracketIndex);
+                        numberCloseBracket += 1;
+                    }
+                }
+
+                string funcText = text.Substring(funcMatchHead.Index, lastBracketIndex - funcMatchHead.Index + 1);
+
+                Func func = new Func( funcText, funcMatchHead.Index);
 
                 return func;
 
@@ -105,7 +129,7 @@ namespace lab1
         {
             if (index < text.Length)
             {
-                Regex regexToFindAssignment = new Regex(@"[a-z,A-Z][a-z,A-Z,0-9]*\s*=\s*[\s,\*,\(,\),\+,\-,\\,a-z,A-Z,0-9]*;");
+                Regex regexToFindAssignment = new Regex(@"[a-z,A-Z][a-z,A-Z,0-9]*\s*=\s*[\s,\*,\(,\),\+,\-,\\,a-z,A-Z,0-9, \.]*;");
                 Match assignmentMatch = regexToFindAssignment.Match(text, index);
                 if (assignmentMatch.Success)
                 {
@@ -118,6 +142,27 @@ namespace lab1
                 }
                 else
                 {
+                    return null;
+                }
+            }
+            else
+            {
+                return null;
+            }
+        }
+
+
+        static public Varibale FindVaribale(int index, string name, string text)
+        {
+            if (index < text.Length)
+            {
+                if((index = text.IndexOf(name, index)) != -1)
+                {
+                    Varibale varibale = new Varibale(name, text.IndexOf(name, index));
+
+                    return varibale;
+
+                } else {
                     return null;
                 }
             }

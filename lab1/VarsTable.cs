@@ -58,6 +58,21 @@ namespace lab1
             throw new Exception("Have not var with this name and view!");
         }
 
+        public List<ItemForVar> GetVarsByView(string view)
+        {
+            List<ItemForVar> items = new List<ItemForVar>();
+            foreach (var item in this.GetVarItemList())
+            {
+                if (item.GetView() == view)
+                {
+                    items.Add(item);
+                }
+            }
+
+            return items;
+
+        }
+
         public List<ItemForVar> GetVarParamsByView(string view)
         {
             List<ItemForVar> funcParams = new List<ItemForVar>();

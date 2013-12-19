@@ -23,13 +23,16 @@ namespace lab1
         public Func(string funcText, int index)
         {
             Regex regexToFindFuncName = new Regex(@"(?<=void\s+)[a-z,A-Z]+[a-z,A-Z,0-9]*");
-            Regex regexToFindFuncBody = new Regex(@"(?<={)\s[\w,(,);,\s,|,\/,\*,\+,\=,\[,\],\.,\!,\-,\%,""]*");
+           // Regex regexToFindFuncBody = new Regex(@"(?<={)\s[\w,(,);,:,\s,|,\/,\*,\+,\=,\[,\],\.,\!,\-,\%,\&,"", \?, \\]*}");//ничего ненаходило
+            Regex regexToFindFuncBody = new Regex(@"(?<={)\s[\w,(,);,:,\s,|,\/,\*,\+,\=,\[,\],\.,\!,\-,\%,&,>,<,\?,""]*");
+
             Regex regexToFindFuncParams = new Regex(@"(?<=void\s+[a-z, A-Z][a-z,A-Z,0-9]*\s*\(\s*)[\W,\w]*(?=\)\s*{)");
 
             Match name = regexToFindFuncName.Match(funcText);
             Match body = regexToFindFuncBody.Match(funcText);
             Match funcParams = regexToFindFuncParams.Match(funcText);
 
+            
             this._funcText = funcText;
             this._nameText = name.Value;
             this._bodyText = body.Value;

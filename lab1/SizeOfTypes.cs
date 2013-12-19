@@ -12,7 +12,7 @@ namespace lab1
         public SizeOfTypes()
         {
             this._types["int"] = 1;
-            this._types["string"] = 30;
+            this._types["string"] = 70;
         }
 
         public int GetSizeOfType(string type) {

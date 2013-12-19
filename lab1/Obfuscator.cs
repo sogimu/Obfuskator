@@ -16,8 +16,23 @@ namespace lab1
         {
             switch (type)
             {
-                case "int": {return this._nameFuncToRead + index.ToString() + ")";};
-                case "char": { return "(char)" + this._nameFuncToRead + index.ToString() + ")"; };
+                case "int": { return this._nameFuncToRead + index.ToString() + ")"; };
+                case "string": //{ return "(char)" + this._nameFuncToRead + index.ToString() + ")"; };
+                    {
+                        string callFuncToRead = "(" + "(char)" + this._nameFuncToRead + index.ToString() + ")";
+                        ItemForVar item = this._table.GetVarByIndex(index);
+
+                        //callFuncToRead = "(" + this.GetFuncCallToRead(index, "char");
+
+                        for (int i = 1; i < item.GetFullSellsCount(); i++)
+                        {
+                            int indexOfChar = index + i;
+                            callFuncToRead += "+" + "(char)" + this._nameFuncToRead + indexOfChar.ToString() + ")";
+                        }
+
+                        callFuncToRead += ").ToString()";
+                        return callFuncToRead;
+                    }
                 
             }
             return "not func for " + type;
@@ -103,9 +118,11 @@ namespace lab1
                 {
                     int index = this._table.AddVar(intConst.GetItemForVar());
                     int posIntoText = intConst.GetIndexIntoText() + func.GetIndexBody() + func.GetIndexFuncIntoText();
+                    
                     text = text.Remove(posIntoText, intConst.GetLength());
                     callFuncToRead = this.GetFuncCallToRead(index, "int");
                     text = text.Insert(posIntoText, callFuncToRead);
+                    
                     lastIntConstIndex = intConst.GetIndexIntoText();
                 }
                 lastFuncIndex = func.GetIndexFuncIntoText() + func.GetFuncText().Length;
@@ -127,18 +144,16 @@ namespace lab1
                     // 2 кавычки
                     text = text.Remove(posIntoText, stringConst.GetLength() + 2);
 
-                    //int posLastCallFunc;
-                    callFuncToRead = "(" + this.GetFuncCallToRead(index, "char");
-                    //text = text.Insert(posIntoText, callFuncToRead);
-                    //posLastCallFunc = posIntoText + callFuncToRead.Length;
+                    callFuncToRead = this.GetFuncCallToRead(index, "string");
+                    /*callFuncToRead = "(" + this.GetFuncCallToRead(index, "char");
 
                     for (int i = 1; i < stringConst.GetLength(); i++)
                     {
                         int indexOfChar = index + i;
                         callFuncToRead += "+"+this.GetFuncCallToRead(indexOfChar, "char");
-                        //posLastCallFunc = callFuncToRead.Length;
                     }
-                    callFuncToRead += ").ToString()";
+
+                    callFuncToRead += ").ToString()";*/
                     text = text.Insert(posIntoText, callFuncToRead);
                         
                     lastStringConstIndex = stringConst.GetIndexIntoText();
@@ -207,6 +222,40 @@ namespace lab1
 
             return text;
         }
+
+        private string WorkWithLocalVars(string text)
+        {
+            Func func;
+
+            int lastFuncIndex = 0;
+
+            while ((func = Programm.FindFunc(lastFuncIndex, text)) != null)
+            {
+                int lastVaribaleIndex = 0;
+                Varibale varibale;
+                List<ItemForVar> items = this._table.GetVarsByView(func.GetName());
+
+                foreach (ItemForVar item in items)
+                {
+                    while ((varibale = Programm.FindVaribale(lastVaribaleIndex, item.GetName(), func.GetBody())) != null)
+                    {
+                        text = text.Remove(func.GetIndexFuncIntoText() + func.GetIndexBody() + varibale.GetIndexIntoText(), varibale.GetText().Length);
+                        string newVaribale = this.GetFuncCallToRead(item.GetIndex(), item.GetType());
+                        text = text.Insert(func.GetIndexFuncIntoText() + func.GetIndexBody() + varibale.GetIndexIntoText(), newVaribale);
+
+                        lastVaribaleIndex = varibale.GetIndexIntoText() + varibale.GetText().Length;
+                        func = Programm.FindFunc(lastFuncIndex, text);
+                    }
+                    lastVaribaleIndex = 0;
+
+                }
+
+                lastFuncIndex = func.GetIndexFuncIntoText() + func.GetFuncText().Length;
+            }
+
+            return text;
+        }
+
         private string WorkWithAssignments(string text)
         {
             Func func;
@@ -317,7 +366,8 @@ namespace lab1
             processedText = WorkWithConsts(processedText);
             processedText = WorkWithFuncsParams(processedText);
             processedText = WorkWithVarInit(processedText);
-            processedText = WorkWithAssignments(processedText);
+            processedText = WorkWithAssignments(processedText);////????
+            processedText = WorkWithLocalVars(processedText);
             processedText = WorkWithFuncCall(processedText);
             processedText = WorkWithArrayAddWriteAndReadFunctions(processedText);
 

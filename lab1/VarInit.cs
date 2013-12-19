@@ -22,7 +22,7 @@ namespace lab1
             Regex regexToType = new Regex(@"^(int|string)");
             Regex regexToName = new Regex(@"(?<=(string|int)\s+)[a-z,A-Z]+[0-9,a-z,A-Z]*(?=(\;|\,|\s*))");
 
-            this._name = regexToName.Match(text).ToString();
+            this._name = regexToName.Match(text).ToString().Split(new Char[] { ',' })[0];
             this._type = regexToType.Match(text).ToString();
 
             this._item = new ItemForVar(null, this.GetName(), -1, this.GetType(), indexIntoText);

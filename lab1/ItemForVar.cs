@@ -77,6 +77,23 @@ namespace lab1
         public int GetSellsCount()
         {
             return this._sizeOfTypes.GetSizeOfType(this.GetType());
+        }
+
+        public int GetFullSellsCount()
+        {
+            int count = 0;
+            for (int i = 0; i < this._sizeOfTypes.GetSizeOfType(this.GetType()); i++)
+            {
+                if (this.GetCellByIndex(i) != -1)
+                {
+                    count += 1;
+                }
+                else
+                {
+                    break;
+                }
+            }
+            return count;
             
         }
 
@@ -87,7 +104,7 @@ namespace lab1
 
         public void SetCellByIndex(int index, int value)
         {
-            if (index < this.GetSellsCount())
+            if (index < this._sizeOfTypes.GetSizeOfType(this.GetType()))
             {
                 this._cells[index] = value;
             }
@@ -100,7 +117,7 @@ namespace lab1
 
         public int GetCellByIndex(int index)
         {
-            if (index < this.GetSellsCount())
+            if (index < this._sizeOfTypes.GetSizeOfType(this.GetType()))
             {
                 return this._cells[index];
             }
