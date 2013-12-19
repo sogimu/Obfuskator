@@ -156,9 +156,13 @@ namespace lab1
         {
             if (index < text.Length)
             {
-                if((index = text.IndexOf(name, index)) != -1)
+                Regex regexToFindVaribale = new Regex(@"(?<=[\+,\-,\*,\/,\(,\),\,,\s]+)"+name+@"(?=[\+,\-,\*,\/,\(,\),\.\;,\,,\s]*)");
+                Match findVaribaleMatch = regexToFindVaribale.Match(text, index);
+                if (findVaribaleMatch.Success)
                 {
-                    Varibale varibale = new Varibale(name, text.IndexOf(name, index));
+                //if((index = text.IndexOf(name, index)) != -1)
+                //{
+                    Varibale varibale = new Varibale(name, findVaribaleMatch.Index);
 
                     return varibale;
 

@@ -8,6 +8,8 @@ namespace lab1
     class Obfuscator
     {
         private string _nameFuncToRead = "fr(";
+        
+        private string _nameFuncToReadString = "frString(";
         private string _nameFuncToWrite = "fw(";
 
         private VarsTable _table = new VarsTable();
@@ -17,20 +19,18 @@ namespace lab1
             switch (type)
             {
                 case "int": { return this._nameFuncToRead + index.ToString() + ")"; };
-                case "string": //{ return "(char)" + this._nameFuncToRead + index.ToString() + ")"; };
+                case "string":
                     {
-                        string callFuncToRead = "(" + "(char)" + this._nameFuncToRead + index.ToString() + ")";
-                        ItemForVar item = this._table.GetVarByIndex(index);
+                        string callFuncToRead = this._nameFuncToReadString + index.ToString() + ")";
+                        //ItemForVar item = this._table.GetVarByIndex(index);
 
-                        //callFuncToRead = "(" + this.GetFuncCallToRead(index, "char");
-
-                        for (int i = 1; i < item.GetFullSellsCount(); i++)
+                        /*for (int i = 1; i < item.GetFullSellsCount(); i++)
                         {
                             int indexOfChar = index + i;
-                            callFuncToRead += "+" + "(char)" + this._nameFuncToRead + indexOfChar.ToString() + ")";
-                        }
+                            callFuncToRead += "+" + "((char)" + this._nameFuncToRead + indexOfChar.ToString() + ")).ToString()";
+                        }*/
 
-                        callFuncToRead += ").ToString()";
+                        //callFuncToRead += ").ToString()";
                         return callFuncToRead;
                     }
                 
@@ -54,6 +54,27 @@ namespace lab1
         private string GetReadFuncText()
         {
             return "public static int " + this._nameFuncToRead + "int index) { return mas[index]; }\n";
+        }
+
+        private string GetReadStringFuncText()
+        {
+            SizeOfTypes sizeOfTypes = new SizeOfTypes();
+
+            return "public static string " + this._nameFuncToReadString + "int index) {\n" +
+                        "string str=\"\";\n" +
+                        "for(int i=0;i<" + sizeOfTypes.GetSizeOfType("string") + "; i++)\n" +
+                        "{\n" +
+                            "if(mas[index + i] != -1)\n" +
+                            "{\n" +
+                                "str += ((char)mas[index + i]).ToString();\n" +
+                            "}\n" +
+                            "else\n" +
+                            "{\n" +
+                                "return str;\n" +
+                            "}\n" +
+                        "}\n" +
+                        "return str;\n" +
+                   "}\n";
         }
 
         private string GetWriteFuncText()
@@ -80,6 +101,7 @@ namespace lab1
                         "foreach(char letter in data)" +
                         "{" +
                             "mas[index + letterIndex] = (int)letter;" +
+                            "letterIndex++;"+
                         "}" +
                         "break;" +
                     "}" +
@@ -351,7 +373,8 @@ namespace lab1
             {
                 int insertPos = func.GetIndexFuncIntoText();
                 text = text.Insert(insertPos, this.GetReadFuncText());
-                text = text.Insert(insertPos += this.GetReadFuncText().Length, this.GetWriteFuncText());
+                text = text.Insert(insertPos += this.GetReadFuncText().Length, this.GetReadStringFuncText());
+                text = text.Insert(insertPos += this.GetReadStringFuncText().Length, this.GetWriteFuncText());
                 text = text.Insert(insertPos += this.GetWriteFuncText().Length, this.GetArrayText());
 
             }

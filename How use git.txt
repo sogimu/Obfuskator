@@ -1,0 +1,8 @@
+git diff
+git pull origin master
+git diff
+
+git add -A
+git commit -m "Some text"
+
+git push -u origin master
