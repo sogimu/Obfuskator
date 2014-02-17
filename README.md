@@ -1,4 +1,4 @@
-Obfuscator
+Obfuskator
 ==========
 
-Simple c# obfuscator
+Stupid ofuskator on C# for C# console application
